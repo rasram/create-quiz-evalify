@@ -1,0 +1,148 @@
+.container {
+  display: flex;
+  background-color: #0f172a;
+  color: white;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  background-color: #1e293b;
+  padding: 20px;
+}
+
+.sidebar h1 {
+  margin-bottom: 40px;
+}
+
+.sidebar a {
+  display: block;
+  margin: 20px 0;
+  color: white;
+  text-decoration: none;
+}
+
+.sidebar .active {
+  font-weight: bold;
+}
+
+.main {
+  flex: 1;
+  padding: 20px 40px;
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.tab {
+  padding: 10px 20px;
+  background-color: #1e293b;
+  color: #93c5fd;
+  border-radius: 5px;
+}
+
+.activeTab {
+  background-color: #0f172a;
+}
+
+.section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+  margin-top: 30px;
+}
+
+.box {
+  flex: 1;
+  min-width: 300px;
+}
+
+.formControl {
+  width: 100%;
+  margin-bottom: 15px;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+}
+.defaultButton {
+  margin-right: 10px;
+  padding: 10px;
+  background-color: #1e40af;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.gradientBtn {
+  background: linear-gradient(to right, #8b5cf6, #ec4899);
+  color: white;
+}
+
+.toggle {
+  margin: 10px 0;
+}
+
+.instructionBox {
+  background-color: #1e293b;
+  padding: 10px;
+  border: 1px solid #334155;
+  border-radius: 5px;
+}
+
+.instructionHeader {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 10px;
+}
+
+
+.section {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.submitButton {
+  background-color: black;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
