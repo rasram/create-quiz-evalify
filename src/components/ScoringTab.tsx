@@ -1,5 +1,15 @@
 import { useState } from 'react';
 import styles from '@/styles/createQuiz.module.css';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 
 interface ScoringTabProps {
   quizData?: {
@@ -35,21 +45,24 @@ export default function ScoringTab({ quizData, onSave }: ScoringTabProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={`${styles.formGroup} col-span-2`}>
           <label htmlFor="scoringMethod" className="block mb-2 font-medium">Scoring Method</label>
-          <select 
-            id="scoringMethod"
+          <Select
             value={scoringMethod}
-            onChange={(e) => setScoringMethod(e.target.value)}
-            className={`${styles.formControl} w-full p-2 rounded border border-gray-300`}
+            onValueChange={(value) => setScoringMethod(value)}
           >
-            <option value="standard">Standard (Fixed points per question)</option>
-            <option value="weighted">Weighted (Different points per question)</option>
-          </select>
+            <SelectTrigger className={`${styles.formControl} w-full p-2 rounded border border-gray-300 dark:border-gray-600 mb-6`}>
+              <SelectValue/>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='standard'>Standard (Fixed points per question)</SelectItem>
+              <SelectItem value='weighted'>Weighted (Different points per question)</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         
         {scoringMethod === 'standard' && (
           <div className={`${styles.formGroup} col-span-2 md:col-span-1`}>
             <label htmlFor="pointsPerQuestion" className="block mb-2 font-medium">Points per Question</label>
-            <input 
+            <Input
               id="pointsPerQuestion"
               type="number" 
               min="1"
@@ -62,21 +75,18 @@ export default function ScoringTab({ quizData, onSave }: ScoringTabProps) {
         
         <div className={`${styles.formGroup} col-span-2 flex items-center py-2`}>
           <label className="inline-flex items-center cursor-pointer">
-            <input 
-              type="checkbox"
-              className="sr-only peer"
+            <span className='font-medium me-3'>Penalize Wrong Answers</span>
+            <Switch
               checked={penalizeWrong}
-              onChange={(e) => setPenalizeWrong(e.target.checked)}
+              onCheckedChange={setPenalizeWrong}
             />
-            <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-            <span className="ms-3 font-medium">Penalize Wrong Answers</span>
           </label>
         </div>
         
         {penalizeWrong && (
           <div className={`${styles.formGroup} col-span-2 md:col-span-1`}>
             <label htmlFor="penaltyAmount" className="block mb-2 font-medium">Penalty Amount</label>
-            <input 
+            <Input
               id="penaltyAmount"
               type="number" 
               min="0"
@@ -89,12 +99,12 @@ export default function ScoringTab({ quizData, onSave }: ScoringTabProps) {
       </div>
       
       <div className="flex justify-end mt-8">
-        <button 
+        <Button 
           onClick={handleSave}
           className={`${styles.primaryButton} px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition`}
         >
           Save Scoring Settings
-        </button>
+        </Button>
       </div>
     </div>
   );
