@@ -1,74 +1,131 @@
 'use client'
-import { useState } from 'react';
+import { useState, KeyboardEvent } from 'react';
 import { Switch } from "@headlessui/react";
 import { XMarkIcon } from '@heroicons/react/20/solid';
 
-export default function MetadataTab() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [duration, setDuration] = useState("");
-  const [durationUnit, setDurationUnit] = useState("Minutes");
-  const [startTime, setStartTime] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [course, setCourse] = useState("Math");
-  const [tags, setTags] = useState(["Mid Sem", "End Sem", "Daily test", "Practice"]);
-  const [tagInput, setTagInput] = useState("");
-  const [isPasswordProtected, setPasswordProtected] = useState(false);
-  const [password, setPassword] = useState("");
-  const [autoSubmit, setAutoSubmit] = useState(false);
-  const [calculatorAccess, setCalculatorAccess] = useState(false);
-  const [allowTabSwitching, setAllowTabSwitching] = useState(false);
+interface MetadataTabProps {
+  quizData?: {
+    metadata?: {
+      title: string;
+      description: string;
+      duration: string;
+      durationUnit: string;
+      startTime: string;
+      startDate: string;
+      endTime: string;
+      endDate: string;
+      course: string;
+      tags: string[];
+      isPasswordProtected: boolean;
+      password: string;
+      autoSubmit: boolean;
+      calculatorAccess: boolean;
+      allowTabSwitching: boolean;
+    }
+  };
+  onSave?: (metadataData: any) => void;
+}
 
-  const addTag = () => {
+export default function MetadataTab({ quizData, onSave }: MetadataTabProps) {
+  const [title, setTitle] = useState<string>(quizData?.metadata?.title || "");
+  const [description, setDescription] = useState<string>(quizData?.metadata?.description || "");
+  const [duration, setDuration] = useState<string>(quizData?.metadata?.duration || "");
+  const [durationUnit, setDurationUnit] = useState<string>(quizData?.metadata?.durationUnit || "Minutes");
+  const [startTime, setStartTime] = useState<string>(quizData?.metadata?.startTime || "");
+  const [startDate, setStartDate] = useState<string>(quizData?.metadata?.startDate || "");
+  const [endTime, setEndTime] = useState<string>(quizData?.metadata?.endTime || "");
+  const [endDate, setEndDate] = useState<string>(quizData?.metadata?.endDate || "");
+  const [course, setCourse] = useState<string>(quizData?.metadata?.course || "Math");
+  const [tags, setTags] = useState<string[]>(quizData?.metadata?.tags || ["Mid Sem", "End Sem", "Daily test", "Practice"]);
+  const [tagInput, setTagInput] = useState<string>("");
+  const [isPasswordProtected, setPasswordProtected] = useState<boolean>(quizData?.metadata?.isPasswordProtected || false);
+  const [password, setPassword] = useState<string>(quizData?.metadata?.password || "");
+  const [autoSubmit, setAutoSubmit] = useState<boolean>(quizData?.metadata?.autoSubmit || false);
+  const [calculatorAccess, setCalculatorAccess] = useState<boolean>(quizData?.metadata?.calculatorAccess || false);
+  const [allowTabSwitching, setAllowTabSwitching] = useState<boolean>(quizData?.metadata?.allowTabSwitching || false);
+
+  const addTag = (): void => {
     if (tagInput && !tags.includes(tagInput)) {
       setTags([...tags, tagInput]);
       setTagInput("");
     }
   };
 
-  const removeTag = (tagToRemove: string) => {
+  const removeTag = (tagToRemove: string): void => {
     setTags(tags.filter(tag => tag !== tagToRemove));
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>): void => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addTag();
+    }
+  };
+
+  const handleSave = (): void => {
+    if (onSave) {
+      onSave({
+        title,
+        description,
+        duration,
+        durationUnit,
+        startTime,
+        startDate,
+        endTime,
+        endDate,
+        course,
+        tags,
+        isPasswordProtected,
+        password,
+        autoSubmit,
+        calculatorAccess,
+        allowTabSwitching
+      });
+    }
   };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 max-w-6xl mx-auto">
       <div className="space-y-6">
         <div>
-          <label className="block text-sm font-medium mb-2">Title</label>
+          <label htmlFor="quiz-title" className="block text-sm font-medium mb-2">Title</label>
           <input 
+            id="quiz-title"
             value={title} 
-            onChange={e => setTitle(e.target.value)} 
+            onChange={(e) => setTitle(e.target.value)} 
             className="w-full p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500" 
             placeholder="Enter quiz title"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Description</label>
+          <label htmlFor="quiz-description" className="block text-sm font-medium mb-2">Description</label>
           <textarea 
+            id="quiz-description"
             value={description} 
-            onChange={e => setDescription(e.target.value)} 
+            onChange={(e) => setDescription(e.target.value)} 
             className="w-full p-2.5 h-32 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500" 
             placeholder="Enter quiz description"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Quiz Duration</label>
+          <label htmlFor="quiz-duration" className="block text-sm font-medium mb-2">Quiz Duration</label>
           <div className="flex space-x-3">
             <input 
+              id="quiz-duration"
               type="number" 
               value={duration} 
-              onChange={e => setDuration(e.target.value)} 
+              onChange={(e) => setDuration(e.target.value)} 
               className="w-full p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500" 
               placeholder="Duration"
             />
             <select 
+              id="duration-unit"
               value={durationUnit} 
-              onChange={e => setDurationUnit(e.target.value)} 
+              onChange={(e) => setDurationUnit(e.target.value)} 
               className="w-1/2 p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
+              aria-label="Duration unit"
             >
               <option>Minutes</option>
               <option>Hours</option>
@@ -80,16 +137,20 @@ export default function MetadataTab() {
           <label className="block text-sm font-medium mb-2">Start Time</label>
           <div className="grid grid-cols-2 gap-3">
             <input 
+              id="start-date"
               type="date" 
               value={startDate} 
-              onChange={e => setStartDate(e.target.value)} 
-              className="p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500" 
+              onChange={(e) => setStartDate(e.target.value)} 
+              className="p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
+              aria-label="Start date"
             />
             <input 
+              id="start-time"
               type="time" 
               value={startTime} 
-              onChange={e => setStartTime(e.target.value)} 
-              className="p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500" 
+              onChange={(e) => setStartTime(e.target.value)} 
+              className="p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
+              aria-label="Start time"
             />
           </div>
         </div>
@@ -98,16 +159,20 @@ export default function MetadataTab() {
           <label className="block text-sm font-medium mb-2">End Time</label>
           <div className="grid grid-cols-2 gap-3">
             <input 
+              id="end-date"
               type="date" 
               value={endDate} 
-              onChange={e => setEndDate(e.target.value)} 
-              className="p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500" 
+              onChange={(e) => setEndDate(e.target.value)} 
+              className="p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
+              aria-label="End date" 
             />
             <input 
+              id="end-time"
               type="time" 
               value={endTime} 
-              onChange={e => setEndTime(e.target.value)} 
-              className="p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500" 
+              onChange={(e) => setEndTime(e.target.value)} 
+              className="p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
+              aria-label="End time"
             />
           </div>
         </div>
@@ -115,10 +180,11 @@ export default function MetadataTab() {
 
       <div className="space-y-6">
         <div>
-          <label className="block text-sm font-medium mb-2">Associated Course</label>
+          <label htmlFor="course-select" className="block text-sm font-medium mb-2">Associated Course</label>
           <select 
+            id="course-select"
             value={course} 
-            onChange={e => setCourse(e.target.value)} 
+            onChange={(e) => setCourse(e.target.value)} 
             className="w-full p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
           >
             <option>Math</option>
@@ -128,18 +194,20 @@ export default function MetadataTab() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Add Tags</label>
+          <label htmlFor="tag-input" className="block text-sm font-medium mb-2">Add Tags</label>
           <div className="flex space-x-2 mb-3">
             <input 
+              id="tag-input"
               value={tagInput} 
-              onChange={e => setTagInput(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && addTag()}
+              onChange={(e) => setTagInput(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="w-full p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500" 
               placeholder="Add a tag..." 
             />
             <button 
               onClick={addTag} 
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
+              aria-label="Add tag"
             >
               Add
             </button>
@@ -151,6 +219,7 @@ export default function MetadataTab() {
                 <button 
                   onClick={() => removeTag(tag)} 
                   className="ml-1.5 hover:text-red-500"
+                  aria-label={`Remove ${tag} tag`}
                 >
                   <XMarkIcon className="h-4 w-4" />
                 </button>
@@ -174,10 +243,12 @@ export default function MetadataTab() {
           
           {isPasswordProtected && (
             <input 
+              id="password-input"
               value={password} 
-              onChange={e => setPassword(e.target.value)} 
+              onChange={(e) => setPassword(e.target.value)} 
               placeholder="ENTER KEY HERE" 
-              className="w-full mt-3 p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500" 
+              className="w-full mt-3 p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
+              aria-label="Password" 
             />
           )}
         </div>

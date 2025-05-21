@@ -1,40 +1,42 @@
 import { useState } from 'react';
 import styles from '@/styles/createQuiz.module.css';
 
+interface PublishingSettings {
+  publishDate: string;
+  publishTime: string;
+  visibility: string;
+  showResultsAfterSubmission: boolean;
+  resultsPublishDate: string;
+  resultsPublishTime: string;
+  postQuizFeedback: boolean;
+  allowRetake: boolean;
+  retakeCount: number;
+}
+
 interface PublishingTabProps {
   quizData?: {
-    publishing?: {
-      publishDate: string;
-      publishTime: string;
-      visibility: string;
-      showResultsAfterSubmission: boolean;
-      resultsPublishDate: string;
-      resultsPublishTime: string;
-      postQuizFeedback: boolean;
-      allowRetake: boolean;
-      retakeCount: number;
-    }
+    publishing?: PublishingSettings;
   };
-  onSave?: (publishingData: any) => void;
+  onSave?: (publishingData: PublishingSettings) => void;
 }
 
 export default function PublishingTab({ quizData, onSave }: PublishingTabProps) {
   // Initialize state with props or default values
-  const [publishDate, setPublishDate] = useState(quizData?.publishing?.publishDate || '');
-  const [publishTime, setPublishTime] = useState(quizData?.publishing?.publishTime || '');
-  const [visibility, setVisibility] = useState(quizData?.publishing?.visibility || 'Batch 1');
-  const [showResultsAfterSubmission, setShowResultsAfterSubmission] = useState(
+  const [publishDate, setPublishDate] = useState<string>(quizData?.publishing?.publishDate || '');
+  const [publishTime, setPublishTime] = useState<string>(quizData?.publishing?.publishTime || '');
+  const [visibility, setVisibility] = useState<string>(quizData?.publishing?.visibility || 'Batch 1');
+  const [showResultsAfterSubmission, setShowResultsAfterSubmission] = useState<boolean>(
     quizData?.publishing?.showResultsAfterSubmission || false
   );
-  const [resultsPublishDate, setResultsPublishDate] = useState(quizData?.publishing?.resultsPublishDate || '');
-  const [resultsPublishTime, setResultsPublishTime] = useState(quizData?.publishing?.resultsPublishTime || '');
-  const [postQuizFeedback, setPostQuizFeedback] = useState(quizData?.publishing?.postQuizFeedback || false);
-  const [allowRetake, setAllowRetake] = useState(quizData?.publishing?.allowRetake || false);
-  const [retakeCount, setRetakeCount] = useState(quizData?.publishing?.retakeCount || 0);
+  const [resultsPublishDate, setResultsPublishDate] = useState<string>(quizData?.publishing?.resultsPublishDate || '');
+  const [resultsPublishTime, setResultsPublishTime] = useState<string>(quizData?.publishing?.resultsPublishTime || '');
+  const [postQuizFeedback, setPostQuizFeedback] = useState<boolean>(quizData?.publishing?.postQuizFeedback || false);
+  const [allowRetake, setAllowRetake] = useState<boolean>(quizData?.publishing?.allowRetake || false);
+  const [retakeCount, setRetakeCount] = useState<number>(quizData?.publishing?.retakeCount || 0);
 
-  const handleSave = () => {
+  const handleSave = (): void => {
     if (onSave) {
-      onSave({
+      const publishingData: PublishingSettings = {
         publishDate,
         publishTime,
         visibility,
@@ -44,7 +46,8 @@ export default function PublishingTab({ quizData, onSave }: PublishingTabProps) 
         postQuizFeedback,
         allowRetake,
         retakeCount
-      });
+      };
+      onSave(publishingData);
     }
   };
 
@@ -52,8 +55,9 @@ export default function PublishingTab({ quizData, onSave }: PublishingTabProps) 
     <div className={`${styles.tabContent} p-4 max-w-3xl mx-auto`}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={`${styles.formGroup} col-span-1`}>
-          <label className="block mb-2 font-medium">Quiz Publish Date</label>
+          <label htmlFor="publish-date" className="block mb-2 font-medium">Quiz Publish Date</label>
           <input 
+            id="publish-date"
             type="date" 
             className={`${styles.formControl} w-full p-2 rounded`}
             value={publishDate}
@@ -63,8 +67,9 @@ export default function PublishingTab({ quizData, onSave }: PublishingTabProps) 
         </div>
         
         <div className={`${styles.formGroup} col-span-1`}>
-          <label className="block mb-2 font-medium">Quiz Publish Time</label>
+          <label htmlFor="publish-time" className="block mb-2 font-medium">Quiz Publish Time</label>
           <input 
+            id="publish-time"
             type="time" 
             className={`${styles.formControl} w-full p-2 rounded`}
             value={publishTime}
@@ -75,8 +80,9 @@ export default function PublishingTab({ quizData, onSave }: PublishingTabProps) 
         </div>
 
         <div className={`${styles.formGroup} col-span-2`}>
-          <label className="block mb-2 font-medium">Visibility</label>
+          <label htmlFor="visibility" className="block mb-2 font-medium">Visibility</label>
           <select 
+            id="visibility"
             className={`${styles.formControl} w-full p-2 rounded`}
             value={visibility}
             title="Select Visibility"
@@ -89,9 +95,10 @@ export default function PublishingTab({ quizData, onSave }: PublishingTabProps) 
         </div>
 
         <div className={`${styles.formGroup} col-span-2 flex items-center justify-between py-2`}>
-          <label className="font-medium">Show results after submission?</label>
+          <label htmlFor="results-after-submit" className="font-medium">Show results after submission?</label>
           <label className="inline-flex items-center cursor-pointer">
             <input 
+              id="results-after-submit"
               type="checkbox" 
               className="sr-only peer"
               checked={showResultsAfterSubmission}
@@ -102,8 +109,9 @@ export default function PublishingTab({ quizData, onSave }: PublishingTabProps) 
         </div>
 
         <div className={`${styles.formGroup} col-span-1`}>
-          <label className="block mb-2 font-medium">Results Publish Date</label>
+          <label htmlFor="results-publish-date" className="block mb-2 font-medium">Results Publish Date</label>
           <input 
+            id="results-publish-date"
             type="date" 
             className={`${styles.formControl} w-full p-2 rounded`}
             value={resultsPublishDate}
@@ -112,8 +120,9 @@ export default function PublishingTab({ quizData, onSave }: PublishingTabProps) 
         </div>
         
         <div className={`${styles.formGroup} col-span-1`}>
-          <label className="block mb-2 font-medium">Results Publish Time</label>
+          <label htmlFor="results-publish-time" className="block mb-2 font-medium">Results Publish Time</label>
           <input 
+            id="results-publish-time"
             type="time" 
             className={`${styles.formControl} w-full p-2 rounded`}
             value={resultsPublishTime}
@@ -122,9 +131,10 @@ export default function PublishingTab({ quizData, onSave }: PublishingTabProps) 
         </div>
 
         <div className={`${styles.formGroup} col-span-2 flex items-center justify-between py-2`}>
-          <label className="font-medium">Post Quiz feedback</label>
+          <label htmlFor="post-quiz-feedback" className="font-medium">Post Quiz feedback</label>
           <label className="inline-flex items-center cursor-pointer">
             <input 
+              id="post-quiz-feedback"
               type="checkbox" 
               className="sr-only peer"
               checked={postQuizFeedback}
@@ -135,9 +145,10 @@ export default function PublishingTab({ quizData, onSave }: PublishingTabProps) 
         </div>
 
         <div className={`${styles.formGroup} col-span-2 flex items-center justify-between py-2`}>
-          <label className="font-medium">Allow quiz retake</label>
+          <label htmlFor="allow-retake" className="font-medium">Allow quiz retake</label>
           <label className="inline-flex items-center cursor-pointer">
             <input 
+              id="allow-retake"
               type="checkbox" 
               className="sr-only peer"
               checked={allowRetake}
@@ -149,8 +160,9 @@ export default function PublishingTab({ quizData, onSave }: PublishingTabProps) 
 
         {allowRetake && (
           <div className={`${styles.formGroup} col-span-2`}>
-            <label className="block mb-2 font-medium">Number of retakes allowed</label>
+            <label htmlFor="retake-count" className="block mb-2 font-medium">Number of retakes allowed</label>
             <input 
+              id="retake-count"
               type="number" 
               className={`${styles.formControl} w-40 p-2 rounded`}
               value={retakeCount}
@@ -165,6 +177,7 @@ export default function PublishingTab({ quizData, onSave }: PublishingTabProps) 
         <button 
           className={`${styles.submitButton} px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition`}
           onClick={handleSave}
+          aria-label="Save Publishing Settings"
         >
           Save Publishing Settings
         </button>
