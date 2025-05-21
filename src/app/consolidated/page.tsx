@@ -3,7 +3,6 @@
 import type React from "react"
 import { useState } from "react"
 import { format } from "date-fns"
-import { cn } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -323,9 +322,9 @@ export default function QuizCreator() {
                     {quizData.metadata.tags.map((tag) => (
                       <Badge key={tag} variant="secondary" className="flex items-center gap-1 px-3 py-1">
                         {tag}
-                        <button onClick={() => removeTag(tag)} className="text-gray-400 hover:text-gray-200">
+                        <Button onClick={() => removeTag(tag)} className="text-gray-400 hover:text-gray-200 h-6" variant={"ghost"}>
                           <X className="h-3 w-3" />
-                        </button>
+                        </Button>
                       </Badge>
                     ))}
                   </div>
