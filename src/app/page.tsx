@@ -15,15 +15,21 @@ export default function CreateQuiz() {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'metadata':
-        return <MetadataTab />;
+        return (
+        <>
+          <MetadataTab />
+          <ScoringTab />
+          <PublishingTab />
+        </>
+        );
       case 'organisation':
         return <OrganisationTab />;
-      case 'scoring':
-        return <ScoringTab />;
-      case 'publishing':
-        return <PublishingTab />;
       default:
-        return <MetadataTab />;
+        return <>
+          <MetadataTab />
+          <ScoringTab />
+          <PublishingTab />
+        </>;
     }
   };
 
