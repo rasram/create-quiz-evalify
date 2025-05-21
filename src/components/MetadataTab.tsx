@@ -1,7 +1,19 @@
 'use client'
+
 import { useState, KeyboardEvent } from 'react';
-import { Switch } from "@headlessui/react";
+import { Switch } from "@/components/ui/switch";
 import { XMarkIcon } from '@heroicons/react/20/solid';
+import {Textarea} from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 interface MetadataTabProps {
   quizData?: {
@@ -27,22 +39,22 @@ interface MetadataTabProps {
 }
 
 export default function MetadataTab({ quizData, onSave }: MetadataTabProps) {
-  const [title, setTitle] = useState<string>(quizData?.metadata?.title || "");
-  const [description, setDescription] = useState<string>(quizData?.metadata?.description || "");
-  const [duration, setDuration] = useState<string>(quizData?.metadata?.duration || "");
-  const [durationUnit, setDurationUnit] = useState<string>(quizData?.metadata?.durationUnit || "Minutes");
-  const [startTime, setStartTime] = useState<string>(quizData?.metadata?.startTime || "");
-  const [startDate, setStartDate] = useState<string>(quizData?.metadata?.startDate || "");
-  const [endTime, setEndTime] = useState<string>(quizData?.metadata?.endTime || "");
-  const [endDate, setEndDate] = useState<string>(quizData?.metadata?.endDate || "");
-  const [course, setCourse] = useState<string>(quizData?.metadata?.course || "Math");
-  const [tags, setTags] = useState<string[]>(quizData?.metadata?.tags || ["Mid Sem", "End Sem", "Daily test", "Practice"]);
-  const [tagInput, setTagInput] = useState<string>("");
-  const [isPasswordProtected, setPasswordProtected] = useState<boolean>(quizData?.metadata?.isPasswordProtected || false);
-  const [password, setPassword] = useState<string>(quizData?.metadata?.password || "");
-  const [autoSubmit, setAutoSubmit] = useState<boolean>(quizData?.metadata?.autoSubmit || false);
-  const [calculatorAccess, setCalculatorAccess] = useState<boolean>(quizData?.metadata?.calculatorAccess || false);
-  const [allowTabSwitching, setAllowTabSwitching] = useState<boolean>(quizData?.metadata?.allowTabSwitching || false);
+  const [title, setTitle] = useState(quizData?.metadata?.title || "");
+  const [description, setDescription] = useState(quizData?.metadata?.description || "");
+  const [duration, setDuration] = useState(quizData?.metadata?.duration || "");
+  const [durationUnit, setDurationUnit] = useState(quizData?.metadata?.durationUnit || "Minutes");
+  const [startTime, setStartTime] = useState(quizData?.metadata?.startTime || "");
+  const [startDate, setStartDate] = useState(quizData?.metadata?.startDate || "");
+  const [endTime, setEndTime] = useState(quizData?.metadata?.endTime || "");
+  const [endDate, setEndDate] = useState(quizData?.metadata?.endDate || "");
+  const [course, setCourse] = useState(quizData?.metadata?.course || "Math");
+  const [tags, setTags] = useState(quizData?.metadata?.tags || ["Mid Sem", "End Sem", "Daily test", "Practice"]);
+  const [tagInput, setTagInput] = useState("");
+  const [isPasswordProtected, setPasswordProtected] = useState(quizData?.metadata?.isPasswordProtected || false);
+  const [password, setPassword] = useState(quizData?.metadata?.password || "");
+  const [autoSubmit, setAutoSubmit] = useState(quizData?.metadata?.autoSubmit || false);
+  const [calculatorAccess, setCalculatorAccess] = useState(quizData?.metadata?.calculatorAccess || false);
+  const [allowTabSwitching, setAllowTabSwitching] = useState(quizData?.metadata?.allowTabSwitching || false);
 
   const addTag = (): void => {
     if (tagInput && !tags.includes(tagInput)) {
@@ -85,212 +97,85 @@ export default function MetadataTab({ quizData, onSave }: MetadataTabProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 max-w-6xl mx-auto">
-      <div className="space-y-6">
-        <div>
-          <label htmlFor="quiz-title" className="block text-sm font-medium mb-2">Title</label>
-          <input 
-            id="quiz-title"
-            value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
-            className="w-full p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500" 
-            placeholder="Enter quiz title"
-          />
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto p-6">
+      <Card className="bg-black-800 text-white space-y-4 p-6">
+        <Input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <Textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
+
+        <div className="flex gap-2">
+          <Input type="number" placeholder="Duration" value={duration} onChange={(e) => setDuration(e.target.value)} />
+          <Select value={durationUnit} onValueChange={setDurationUnit}>
+            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Minutes">Minutes</SelectItem>
+              <SelectItem value="Hours">Hours</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
-        <div>
-          <label htmlFor="quiz-description" className="block text-sm font-medium mb-2">Description</label>
-          <textarea 
-            id="quiz-description"
-            value={description} 
-            onChange={(e) => setDescription(e.target.value)} 
-            className="w-full p-2.5 h-32 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500" 
-            placeholder="Enter quiz description"
-          />
+        <div className="grid grid-cols-2 gap-2">
+          <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+          <Input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
         </div>
 
+        <div className="grid grid-cols-2 gap-2">
+          <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+          <Input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+        </div>
+
+        <Select value={course} onValueChange={setCourse}>
+          <SelectTrigger><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Math">Math</SelectItem>
+            <SelectItem value="Physics">Physics</SelectItem>
+            <SelectItem value="Chemistry">Chemistry</SelectItem>
+          </SelectContent>
+        </Select>
+
         <div>
-          <label htmlFor="quiz-duration" className="block text-sm font-medium mb-2">Quiz Duration</label>
-          <div className="flex space-x-3">
-            <input 
-              id="quiz-duration"
-              type="number" 
-              value={duration} 
-              onChange={(e) => setDuration(e.target.value)} 
-              className="w-full p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500" 
-              placeholder="Duration"
-            />
-            <select 
-              id="duration-unit"
-              value={durationUnit} 
-              onChange={(e) => setDurationUnit(e.target.value)} 
-              className="w-1/2 p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
-              aria-label="Duration unit"
-            >
-              <option>Minutes</option>
-              <option>Hours</option>
-            </select>
+          <div className="flex gap-2">
+            <Input placeholder="Add a tag..." value={tagInput} onChange={(e) => setTagInput(e.target.value)} onKeyDown={handleKeyDown} />
+            <Button onClick={addTag}>Add</Button>
           </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-2">Start Time</label>
-          <div className="grid grid-cols-2 gap-3">
-            <input 
-              id="start-date"
-              type="date" 
-              value={startDate} 
-              onChange={(e) => setStartDate(e.target.value)} 
-              className="p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
-              aria-label="Start date"
-            />
-            <input 
-              id="start-time"
-              type="time" 
-              value={startTime} 
-              onChange={(e) => setStartTime(e.target.value)} 
-              className="p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
-              aria-label="Start time"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-2">End Time</label>
-          <div className="grid grid-cols-2 gap-3">
-            <input 
-              id="end-date"
-              type="date" 
-              value={endDate} 
-              onChange={(e) => setEndDate(e.target.value)} 
-              className="p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
-              aria-label="End date" 
-            />
-            <input 
-              id="end-time"
-              type="time" 
-              value={endTime} 
-              onChange={(e) => setEndTime(e.target.value)} 
-              className="p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
-              aria-label="End time"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-6">
-        <div>
-          <label htmlFor="course-select" className="block text-sm font-medium mb-2">Associated Course</label>
-          <select 
-            id="course-select"
-            value={course} 
-            onChange={(e) => setCourse(e.target.value)} 
-            className="w-full p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
-          >
-            <option>Math</option>
-            <option>Physics</option>
-            <option>Chemistry</option>
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="tag-input" className="block text-sm font-medium mb-2">Add Tags</label>
-          <div className="flex space-x-2 mb-3">
-            <input 
-              id="tag-input"
-              value={tagInput} 
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="w-full p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500" 
-              placeholder="Add a tag..." 
-            />
-            <button 
-              onClick={addTag} 
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
-              aria-label="Add tag"
-            >
-              Add
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mt-2">
             {tags.map(tag => (
-              <span key={tag} className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 dark:bg-gray-700">
+              <span key={tag} className="text-black inline-flex items-center px-3 py-1 bg-muted text-sm rounded-full">
                 {tag}
-                <button 
-                  onClick={() => removeTag(tag)} 
-                  className="ml-1.5 hover:text-red-500"
-                  aria-label={`Remove ${tag} tag`}
-                >
+                <button onClick={() => removeTag(tag)} className="ml-1 text-red-500 hover:text-red-700">
                   <XMarkIcon className="h-4 w-4" />
                 </button>
               </span>
             ))}
           </div>
         </div>
+      </Card>
 
-        <div className="mt-6">
-          <div className="flex items-center justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-            <span className="text-sm font-medium">Password Protection</span>
-            <Switch 
-              checked={isPasswordProtected} 
-              onChange={setPasswordProtected} 
-              className={`${isPasswordProtected ? 'bg-blue-600' : 'bg-gray-200'} relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
-            >
-              <span className="sr-only">Password Protection</span>
-              <span className={`${isPasswordProtected ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`} />
-            </Switch>
-          </div>
-          
-          {isPasswordProtected && (
-            <input 
-              id="password-input"
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              placeholder="ENTER KEY HERE" 
-              className="w-full mt-3 p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
-              aria-label="Password" 
-            />
-          )}
+      <Card className="bg-black-800 text-white space-y-4 p-6">
+        <div className="flex items-center justify-between">
+          <span>Password Protected</span>
+          <Switch checked={isPasswordProtected} onCheckedChange={setPasswordProtected} />
+        </div>
+        {isPasswordProtected && (
+          <Input placeholder="ENTER KEY HERE" value={password} onChange={(e) => setPassword(e.target.value)} />
+        )}
+
+        <div className="flex items-center justify-between">
+          <span>Auto-submit</span>
+          <Switch checked={autoSubmit} onCheckedChange={setAutoSubmit} />
         </div>
 
-        <div className="space-y-4 mt-6">
-          <div className="flex items-center justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-            <span className="text-sm font-medium">Auto-submit</span>
-            <Switch 
-              checked={autoSubmit} 
-              onChange={setAutoSubmit} 
-              className={`${autoSubmit ? 'bg-blue-600' : 'bg-gray-200'} relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
-            >
-              <span className="sr-only">Auto-submit</span>
-              <span className={`${autoSubmit ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`} />
-            </Switch>
-          </div>
-
-          <div className="flex items-center justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-            <span className="text-sm font-medium">Calculator Access</span>
-            <Switch 
-              checked={calculatorAccess} 
-              onChange={setCalculatorAccess} 
-              className={`${calculatorAccess ? 'bg-blue-600' : 'bg-gray-200'} relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
-            >
-              <span className="sr-only">Calculator Access</span>
-              <span className={`${calculatorAccess ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`} />
-            </Switch>
-          </div>
-
-          <div className="flex items-center justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-            <span className="text-sm font-medium">Allow Tab Switching</span>
-            <Switch 
-              checked={allowTabSwitching} 
-              onChange={setAllowTabSwitching} 
-              className={`${allowTabSwitching ? 'bg-blue-600' : 'bg-gray-200'} relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
-            >
-              <span className="sr-only">Allow Tab Switching</span>
-              <span className={`${allowTabSwitching ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`} />
-            </Switch>
-          </div>
+        <div className="flex items-center justify-between">
+          <span>Calculator Access</span>
+          <Switch checked={calculatorAccess} onCheckedChange={setCalculatorAccess} />
         </div>
-      </div>
+
+        <div className="flex items-center justify-between">
+          <span>Allow Tab Switching</span>
+          <Switch checked={allowTabSwitching} onCheckedChange={setAllowTabSwitching} />
+        </div>
+
+        <Button className="w-full mt-4" onClick={handleSave}>Save Metadata</Button>
+      </Card>
     </div>
   );
 }

@@ -1,5 +1,19 @@
 import { useState } from 'react';
 import styles from '@/styles/createQuiz.module.css';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+
 
 interface OrganisationTabProps {
   onSave?: (organizationData: any) => void;
@@ -19,281 +33,233 @@ export default function OrganisationTab({ onSave }: OrganisationTabProps) {
   const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
   const [instructions, setInstructions] = useState<string>('');
   const [questionsShuffled, setQuestionsShuffled] = useState<boolean>(true);
-  const [questionsFixed, setQuestionsFixed] = useState<boolean>(false);
   const [optionsShuffled, setOptionsShuffled] = useState<boolean>(false);
-  const [optionsFixed, setOptionsFixed] = useState<boolean>(true);
   const [partBySections, setPartBySections] = useState<boolean>(false);
   const [questionsPerSection, setQuestionsPerSection] = useState<string>('');
 
   return (
     <div className={`${styles.section} grid grid-cols-1 md:grid-cols-2 gap-6 p-4`}>
       {/* Left Section */}
-      <div className={`${styles.box} bg-gray-50 dark:bg-gray-800 p-5 rounded-lg shadow-md`}>
+      <div className={`${styles.box} bg-gray-500 dark:bg-gray-800 p-5 rounded-lg shadow-md`}>
         <h3 className="text-lg font-semibold mb-4">Question Source</h3>
         <div className="flex flex-col space-y-3 mb-6">
-          <button 
+          <Button 
             className={`${styles.defaultButton} px-4 py-2 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 rounded transition`}
-            aria-label="Add questions from bank"
           >
             Add from bank
-          </button>
-          <button 
+          </Button>
+          <Button 
             className={`${styles.defaultButton} px-4 py-2 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 rounded transition`}
-            aria-label="Add new question"
           >
             Add new question
-          </button>
+          </Button>
         </div>
 
         <h3 className="text-lg font-semibold mb-4 mt-6">Smart Bank Filter</h3>
         <div className="flex flex-col space-y-3 mb-4">
-          <input 
-            title="Linear Navigation Toggle"
-            placeholder="Toggle Linear Navigation"
-
-            type="text" 
-            className={`${styles.formControl} p-2 rounded border border-gray-300 dark:border-gray-600`}
+          <Input 
+            className={`${styles.formControl} w-full p-2 rounded border border-gray-300 dark:border-gray-600`}
+            placeholder='Toggle Linear Navigation' 
             value={searchTag}
             onChange={(e) => setSearchTag(e.target.value)}
-          />
-          <input 
-            type="text" 
-            placeholder="Search Course" 
-            className={`${styles.formControl} p-2 rounded border border-gray-300 dark:border-gray-600`}
+          >
+          </Input>
+          <Input 
+            className={`${styles.formControl} w-full p-2 rounded border border-gray-300 dark:border-gray-600`}
+            placeholder='Search Course' 
             value={searchCourse}
             onChange={(e) => setSearchCourse(e.target.value)}
-          />
-          <input 
-            type="text" 
-            placeholder="Search Sem" 
-            className={`${styles.formControl} p-2 rounded border border-gray-300 dark:border-gray-600`}
+          >
+          </Input>
+          <Input 
+            className={`${styles.formControl} w-full p-2 rounded border border-gray-300 dark:border-gray-600`}
+            placeholder='Search Sem' 
             value={searchSem}
             onChange={(e) => setSearchSem(e.target.value)}
-          />
+          >
+          </Input>
         </div>
         
         <div className={`${styles.difficulty} flex space-x-4 my-4`}>
-          <label className="inline-flex items-center">
-            <input 
-              type="checkbox" 
+          <Label>
+            <Checkbox
               checked={difficultyHigh}
-              onChange={(e) => setDifficultyHigh(e.target.checked)}
-              className="rounded text-blue-600" 
-            />
-            <span className="ml-2">High</span>
-          </label>
-          <label className="inline-flex items-center">
-            <input 
-              type="checkbox" 
+              onCheckedChange={(e) => {
+                if (typeof e === "boolean") {
+                  setDifficultyHigh(e);
+                }
+              }}
+            >
+            </Checkbox>
+            High
+          </Label>
+          <Label>
+            <Checkbox
               checked={difficultyMedium}
-              onChange={(e) => setDifficultyMedium(e.target.checked)}
-              className="rounded text-blue-600" 
-            />
-            <span className="ml-2">Medium</span>
-          </label>
-          <label className="inline-flex items-center">
-            <input 
-              type="checkbox" 
+              onCheckedChange={(e) => {
+                if (typeof e === "boolean") {
+                  setDifficultyMedium(e);
+                }
+              }}
+            >
+            </Checkbox>
+            Medium
+          </Label>
+          <Label>
+            <Checkbox
               checked={difficultyLow}
-              onChange={(e) => setDifficultyLow(e.target.checked)}
-              className="rounded text-blue-600" 
-            />
-            <span className="ml-2">Low</span>
-          </label>
+              onCheckedChange={(e) => {
+                if (typeof e === "boolean") {
+                  setDifficultyLow(e);
+                }
+              }}
+            >
+            </Checkbox>
+            Low
+          </Label>
         </div>
         
-        <select 
-          className={`${styles.formControl} w-full p-2 rounded border border-gray-300 dark:border-gray-600 mb-4`}
-          title="Select question type"
+        <Select
           value={questionType}
-          onChange={(e) => setQuestionType(e.target.value)}
+          onValueChange={(value) => setQuestionType(value)}
         >
-          <option>Descriptive</option>
-          <option>MCQ</option>
-        </select>
+          <SelectTrigger className={`${styles.formControl} w-full p-2 rounded border border-gray-300 dark:border-gray-600 mb-4`}>
+            <SelectValue placeholder="Select Question Type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Descriptive">Descriptive</SelectItem>
+            <SelectItem value="MCQ">MCQ</SelectItem>
+          </SelectContent>
+        </Select>
         
         <div className={`${styles.buttonRow} flex space-x-3 mb-4`}>
-          <button 
+          <Button
             className={`${styles.defaultButton} ${styles.gradientBtn} flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded hover:opacity-90 transition`}
-            aria-label="View questions"
           >
             View questions
-          </button>
-          <button 
+          </Button>
+          <Button
             className={`${styles.defaultButton} ${styles.gradientBtn} flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded hover:opacity-90 transition`}
-            aria-label="Edit questions"
           >
             Edit questions
-          </button>
+          </Button>
         </div>
         
         <div className={`${styles.toggle} flex items-center justify-between py-2 mb-2`}>
           <span>Linear Navigation</span>
-          <label className="inline-flex items-center cursor-pointer">
-            <label className="inline-flex items-center cursor-pointer">
-              <label className="inline-flex items-center cursor-pointer">
-                <label>
-                  <input 
-                    type="checkbox" 
-                    className="sr-only peer"
-                    checked={linearNavigation}
-                    onChange={(e) => setLinearNavigation(e.target.checked)}
-                    title="Toggle linear navigation"
-                    aria-label="Linear Navigation"
-                  />
-                  <span className="ml-2">Linear Navigation</span>
-                </label>
-                <span className="ml-2">Linear Navigation</span>
-              </label>
-              <span className="ml-2">Linear Navigation</span>
-            </label>
-            <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-          </label>
+          <Switch
+            checked={linearNavigation}
+            onCheckedChange={setLinearNavigation}
+          />
         </div>
         
         <div className={`${styles.toggle} flex items-center justify-between py-2`}>
-          <span>Full screen</span>
-          <label className="inline-flex items-center cursor-pointer">
-            <input 
-              type="checkbox" 
-              className="sr-only peer"
-              aria-label='Full screen toggle'
-              checked={fullScreen}
-              onChange={(e) => setFullScreen(e.target.checked)}
-            />
-            <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-          </label>
+          <span>Full Screen</span>
+          <Switch
+            checked={fullScreen}
+            onCheckedChange={setFullScreen}
+          />
         </div>
       </div>
 
       {/* Right Section */}
-      <div className={`${styles.box} bg-gray-50 dark:bg-gray-800 p-5 rounded-lg shadow-md`}>
+      <div className={`${styles.box} bg-gray-500 dark:bg-gray-800 p-5 rounded-lg shadow-md`}>
         <h3 className="text-lg font-semibold mb-4">IDE Access:</h3>
-        <div className={`${styles.toggle} flex items-center justify-between py-2 mb-4`}>
+        <div className={`${styles.toggle} flex items-center justify-between py-2`}>
           <span>Enable IDE</span>
-          <label className="inline-flex items-center cursor-pointer">
-            <input 
-              type="checkbox" 
-              className="sr-only peer"
-              aria-label='Enable IDE'
-              checked={enableIDE}
-              onChange={(e) => setEnableIDE(e.target.checked)}
-            />
-            <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-          </label>
+          <Switch
+            checked={enableIDE}
+            onCheckedChange={setEnableIDE}
+          />
         </div>
         
-        <select 
-          className={`${styles.formControl} w-full p-2 rounded border border-gray-300 dark:border-gray-600 mb-6`}
-          aria-label="Select questions"
-        >
-          <option>Question list (can select multiple questions from dropdown)</option>
-        </select>
+        <Select>
+          <SelectTrigger className={`${styles.formControl} w-full p-2 rounded border border-gray-300 dark:border-gray-600 mb-6`}>
+            <SelectValue placeholder="Select Questions" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Question List">Question list (can select multiple questions from dropdown)</SelectItem>
+          </SelectContent>
+        </Select>
 
         <div className={`${styles.instructionBox} border border-gray-300 dark:border-gray-600 rounded overflow-hidden mb-6`}>
-          <div className={`${styles.instructionHeader} flex items-center bg-gray-100 dark:bg-gray-700 p-2 space-x-2 flex-wrap`}>
-            <button 
+          <div className={`${styles.instructionHeader} flex items-center bg-gray-500 dark:bg-gray-700 p-2 space-x-2 flex-row`}>
+            <Button
               className={`${styles.defaultButton} px-3 py-1 bg-white dark:bg-gray-600 rounded border border-gray-300 dark:border-gray-500`}
-              aria-label="Text style"
-            >Aa</button>
-            <button 
-              className={`${styles.defaultButton} px-3 py-1 bg-white dark:bg-gray-600 rounded border border-gray-300 dark:border-gray-500`}
-              aria-label="Underline text"
-            ><strong>U</strong></button>
-            <button 
-              className={`${styles.defaultButton} px-3 py-1 bg-white dark:bg-gray-600 rounded border border-gray-300 dark:border-gray-500`}
-              aria-label="Italic text"
-            ><em>I</em></button>
-            <button 
-              className={`${styles.defaultButton} px-3 py-1 bg-white dark:bg-gray-600 rounded border border-gray-300 dark:border-gray-500`}
-              aria-label="Bold text"
-            ><b>B</b></button>
-            <select 
-              className={`${styles.formControl} flex-grow p-1 text-sm rounded border border-gray-300 dark:border-gray-600`}
-              aria-label="Question selection"
             >
-              <option>Question list</option>
-            </select>
-            <button 
+              Aa
+            </Button>
+            <Button
               className={`${styles.defaultButton} px-3 py-1 bg-white dark:bg-gray-600 rounded border border-gray-300 dark:border-gray-500`}
-              aria-label="Upload file"
-            >📤</button>
+            >
+              U
+            </Button>
+            <Button
+              className={`${styles.defaultButton} px-3 py-1 bg-white dark:bg-gray-600 rounded border border-gray-300 dark:border-gray-500`}
+            >
+              I
+            </Button>
+            <Button
+              className={`${styles.defaultButton} px-3 py-1 bg-white dark:bg-gray-600 rounded border border-gray-300 dark:border-gray-500`}
+            >
+              B
+            </Button>
+            <Select>
+              <SelectTrigger className={`${styles.formControl} w-full p-2 rounded border border-gray-300 dark:border-gray-600 mb-6`}>
+                <SelectValue placeholder="Question List" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Question List">Question list</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button
+              className={`${styles.defaultButton} px-3 py-1 bg-white dark:bg-gray-600 rounded border border-gray-300 dark:border-gray-500`}
+            >
+              📤
+            </Button>
           </div>
-          <textarea
-            placeholder={`Add instruction..\n+ hints/explanations\n+ can add img file`}
+          <Textarea
+            placeholder="Add instruction.."
             rows={5}
             value={instructions}
             onChange={(e) => setInstructions(e.target.value)}
             className={`${styles.formControl} w-full p-3 border-0 focus:ring-0`}
-            aria-label="Instruction text"
-          ></textarea>
+            >
+          </Textarea>
         </div>
 
-        <div className={`${styles.questionOptions} grid grid-cols-2 gap-y-3 mb-6`}>
-          <label className="inline-flex items-center">
-            <input 
-              type="checkbox" 
+        <div className={`${styles.questionOptions} py-2 mb-4`}>
+          <div className={`${styles.toggle} flex items-center justify-between mb-2`}>
+            <span>Question Order Shuffled</span>
+            <Switch
               checked={questionsShuffled}
-              onChange={(e) => setQuestionsShuffled(e.target.checked)}
-              className="rounded text-blue-600"
-              id="question-shuffle"
+              onCheckedChange={setQuestionsShuffled}
             />
-            <span className="ml-2">Question order Shuffled</span>
-          </label>
-          <label className="inline-flex items-center">
-            <input 
-              type="checkbox" 
-              checked={questionsFixed}
-              onChange={(e) => setQuestionsFixed(e.target.checked)}
-              className="rounded text-blue-600"
-              id="question-fixed"
-            />
-            <span className="ml-2">Fixed</span>
-          </label>
-          <label className="inline-flex items-center">
-            <input 
-              type="checkbox" 
+          </div>
+          <div className={`${styles.toggle} flex items-center justify-between py-2 mb-2`}>
+            <span>Options Order Shuffled</span>
+            <Switch
               checked={optionsShuffled}
-              onChange={(e) => setOptionsShuffled(e.target.checked)}
-              className="rounded text-blue-600"
-              id="options-shuffle"
+              onCheckedChange={setOptionsShuffled}
             />
-            <span className="ml-2">Options order Shuffled</span>
-          </label>
-          <label className="inline-flex items-center">
-            <input 
-              type="checkbox" 
-              checked={optionsFixed}
-              onChange={(e) => setOptionsFixed(e.target.checked)}
-              className="rounded text-blue-600"
-              id="options-fixed"
-            />
-            <span className="ml-2">Fixed</span>
-          </label>
+          </div>
         </div>
 
         <div className={`${styles.toggle} flex items-center justify-between py-2 mb-4`}>
           <span>Part by sections</span>
-          <label className="inline-flex items-center cursor-pointer">
-            <input 
-              type="checkbox" 
-              className="sr-only peer"
-              aria-label='Part by sections'
+            <Switch
               checked={partBySections}
-              onChange={(e) => setPartBySections(e.target.checked)}
+              onCheckedChange={setPartBySections}
             />
-            <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-          </label>
         </div>
         
-        <input
-          type="text"
-          placeholder="How many questions per section?"
-          value={questionsPerSection}
-          onChange={(e) => setQuestionsPerSection(e.target.value)}
-          className={`${styles.formControl} w-full p-2 rounded border border-gray-300 dark:border-gray-600`}
-          aria-label="Questions per section"
-        />
+        <Input 
+            className={`${styles.formControl} w-full p-2 rounded border border-gray-300 dark:border-gray-600`}
+            placeholder='How many questions per section?' 
+            value={questionsPerSection}
+            onChange={(e) => setQuestionsPerSection(e.target.value)}
+          >
+        </Input>
       </div>
     </div>
   );

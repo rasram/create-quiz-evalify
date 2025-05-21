@@ -1,4 +1,4 @@
-// File: C:\Users\Jayan\Coding\Projects\Evalify\create-quiz-evalify\src\app\layout.tsx
+// File: /Users/rash/Documents/Files/Self/College/E/create-quiz-evalify/src/app/layout.tsx
 import * as entry from '../../../src/app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

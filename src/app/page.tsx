@@ -29,7 +29,6 @@ export default function CreateQuiz() {
 
   return (
     <div className={styles.container}>
-      <Sidebar />
       <main className={styles.main}>
         <TopBar username="User123" />
         <div className='mb-8'>
