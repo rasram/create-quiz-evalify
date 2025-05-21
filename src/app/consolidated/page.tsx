@@ -136,7 +136,9 @@ export default function QuizCreator() {
   return (
     <div className="min-h-screen bg-[#0f172a] text-white">
       <header className="flex justify-between items-center p-4 border-b border-gray-800 sticky top-0 z-10 bg-[#0f172a]">
-        <h1 className="text-xl font-bold">Create Quiz</h1>
+        <h1 className="text-2xl md:text-3xl font-semibold text-white mb-4">
+  Create Quiz
+</h1>
         <div className="flex items-center gap-4">
           <div className="text-sm">User123</div>
           <Button onClick={saveQuiz} className="flex items-center gap-2">
@@ -155,7 +157,7 @@ export default function QuizCreator() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left Column - Basic Info */}
-            <Card className="bg-[#1e293b] border-gray-800 lg:col-span-2">
+            <Card className="bg-[#1e293b] border-gray-800 lg:col-span-2 text-white">
               <CardHeader>
                 <CardTitle>Basic Information</CardTitle>
               </CardHeader>
@@ -305,7 +307,7 @@ export default function QuizCreator() {
             </Card>
 
             {/* Right Column - Quiz Settings */}
-            <Card className="bg-[#1e293b] border-gray-800">
+            <Card className="bg-[#1e293b] border-gray-800 text-white">
               <CardHeader>
                 <CardTitle>Quiz Settings</CardTitle>
               </CardHeader>
@@ -380,7 +382,7 @@ export default function QuizCreator() {
             Scoring Method
           </h2>
 
-          <Card className="bg-[#1e293b] border-gray-800">
+          <Card className="bg-[#1e293b] border-gray-800 text-white">
             <CardContent className="space-y-6 p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
@@ -453,7 +455,7 @@ export default function QuizCreator() {
             Publishing Settings
           </h2>
 
-          <Card className="bg-[#1e293b] border-gray-800">
+          <Card className="bg-[#1e293b] border-gray-800 text-white">
             <CardContent className="space-y-6 p-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
@@ -581,7 +583,7 @@ export default function QuizCreator() {
         </section>
 
         {/* Save Button */}
-        <div className="fixed bottom-0 left-0 right-0 bg-[#0f172a] border-t border-gray-800 p-4 flex justify-end">
+        <div className="left-0 right-0 bg-[#0f172a] border-t border-gray-800 p-4 flex justify-end">
           <Button onClick={saveQuiz} size="lg" className="flex items-center gap-2">
             <Save className="h-4 w-4" />
             Save Quiz

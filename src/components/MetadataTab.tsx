@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+
 
 interface MetadataTabProps {
   quizData?: {
@@ -97,8 +97,7 @@ export default function MetadataTab({ quizData, onSave }: MetadataTabProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto p-6">
-      <Card className="bg-black-800 text-white space-y-4 p-6">
+    <div className="flex items-center grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto p-6 bg-black-800 text-white">
         <Input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
         <Textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
 
@@ -148,9 +147,7 @@ export default function MetadataTab({ quizData, onSave }: MetadataTabProps) {
             ))}
           </div>
         </div>
-      </Card>
 
-      <Card className="bg-black-800 text-white space-y-4 p-6">
         <div className="flex items-center justify-between">
           <span>Password Protected</span>
           <Switch checked={isPasswordProtected} onCheckedChange={setPasswordProtected} />
@@ -174,8 +171,6 @@ export default function MetadataTab({ quizData, onSave }: MetadataTabProps) {
           <Switch checked={allowTabSwitching} onCheckedChange={setAllowTabSwitching} />
         </div>
 
-        <Button onClick={handleSave}>Save Metadata</Button>
-      </Card>
     </div>
   );
 }

@@ -98,13 +98,6 @@ export default function ScoringTab({ quizData, onSave }: ScoringTabProps) {
         )}
       </div>
       
-      <div className="flex justify-end mt-8">
-        <Button 
-          onClick={handleSave}
-        >
-          Save Scoring Settings
-        </Button>
-      </div>
     </div>
   );
 }

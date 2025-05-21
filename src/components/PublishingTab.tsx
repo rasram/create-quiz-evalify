@@ -177,7 +177,7 @@ export default function PublishingTab({ quizData, onSave }: PublishingTabProps) 
         <Button 
           onClick={handleSave}
         >
-          Save Publishing Settings
+          Save Settings
         </Button>
       </div>
     </div>
