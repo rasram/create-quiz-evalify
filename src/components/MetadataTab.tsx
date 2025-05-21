@@ -174,7 +174,7 @@ export default function MetadataTab({ quizData, onSave }: MetadataTabProps) {
           <Switch checked={allowTabSwitching} onCheckedChange={setAllowTabSwitching} />
         </div>
 
-        <Button className="w-full mt-4" onClick={handleSave}>Save Metadata</Button>
+        <Button onClick={handleSave}>Save Metadata</Button>
       </Card>
     </div>
   );

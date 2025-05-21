@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from '@/styles/createQuiz.module.css';
-
+import { Button } from './ui/button';
 interface PublishingSettings {
   publishDate: string;
   publishTime: string;
@@ -174,13 +174,11 @@ export default function PublishingTab({ quizData, onSave }: PublishingTabProps) 
       </div>
       
       <div className="flex justify-end mt-8">
-        <button 
-          className={`${styles.submitButton} px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition`}
+        <Button 
           onClick={handleSave}
-          aria-label="Save Publishing Settings"
         >
           Save Publishing Settings
-        </button>
+        </Button>
       </div>
     </div>
   );
