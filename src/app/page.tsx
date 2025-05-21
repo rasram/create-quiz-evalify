@@ -1,10 +1,9 @@
 'use client'
 import { useState } from 'react';
-import Sidebar from '@/components/SideBar';
 import TopBar from '@/components/TopBar';
 import Tabs from '@/components/Tabs';
 import MetadataTab from '@/components/MetadataTab';
-import OrganisationTab from '@/components/OrganisationTab';
+import OrganisationTab from '@/components/QuestionsTab';
 import ScoringTab from '@/components/ScoringTab';
 import PublishingTab from '@/components/PublishingTab';
 import styles from '@/styles/createQuiz.module.css';
