@@ -53,8 +53,8 @@ export default function ScoringTab({ quizData, onSave }: ScoringTabProps) {
               <SelectValue/>
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value='standard'>Standard (Fixed points per question)</SelectItem>
-              <SelectItem value='weighted'>Weighted (Different points per question)</SelectItem>
+              <SelectItem value='standard'>Standard (Fixed points per Question)</SelectItem>
+              <SelectItem value='weighted'>Weighted (Different points per Question)</SelectItem>
             </SelectContent>
           </Select>
         </div>
