@@ -6,9 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-
+import { DateTimePicker } from './datetime-picker'
 interface PublishingSettings {
   publishDate: string;
   publishTime: string;
@@ -67,43 +65,20 @@ export default function PublishingTab({ quizData, onSave }: PublishingTabProps) 
 
       <Card className="bg-[#1e293b] border-gray-800 text-white">
         <CardContent className="space-y-6 p-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Quiz Publish Date
+                Quiz Publish Date & Time
               </label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full bg-[#0f172a] border-gray-700">
-                    {publishDate
-                      ? format(new Date(publishDate), "dd/MM/yyyy")
-                      : "Quiz Publish Date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={publishDate ? new Date(publishDate) : undefined}
-                    onSelect={(date) => {
-                      if (date) {
-                        setPublishDate(date.toISOString().split("T")[0]);
-                      }
-                    }}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Quiz Publish Time
-              </label>
-              <Input
-                type="time"
-                value={publishTime}
-                onChange={(e) => setPublishTime(e.target.value)}
-                className="bg-[#0f172a] border-gray-700"
+              <DateTimePicker
+                value={publishDate && publishTime ? new Date(`${publishDate}T${publishTime}`) : undefined}
+                onChange={(date) => {
+                  if (date) {
+                    setPublishDate(date.toISOString().split('T')[0]);
+                    setPublishTime(date.toTimeString().split(' ')[0].substring(0, 5));
+                  }
+                }}
+                use12HourFormat={true}
               />
             </div>
 
@@ -142,40 +117,17 @@ export default function PublishingTab({ quizData, onSave }: PublishingTabProps) 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
             <div className="space-y-2">
               <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Results Publish Date
+                Results Publish Date & Time
               </label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full bg-[#0f172a] border-gray-700">
-                    {resultsPublishDate
-                      ? format(new Date(resultsPublishDate), "dd/MM/yyyy")
-                      : "Results Publish Date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={resultsPublishDate ? new Date(resultsPublishDate) : undefined}
-                    onSelect={(date) => {
-                      if (date) {
-                        setResultsPublishDate(date.toISOString().split("T")[0]);
-                      }
-                    }}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Results Publish Time
-              </label>
-              <Input
-                type="time"
-                value={resultsPublishTime}
-                onChange={(e) => setResultsPublishTime(e.target.value)}
-                className="bg-[#0f172a] border-gray-700"
+              <DateTimePicker
+                value={resultsPublishDate && resultsPublishTime ? new Date(`${resultsPublishDate}T${resultsPublishTime}`) : undefined}
+                onChange={(date) => {
+                  if (date) {
+                    setResultsPublishDate(date.toISOString().split('T')[0]);
+                    setResultsPublishTime(date.toTimeString().split(' ')[0].substring(0, 5));
+                  }
+                }}
+                use12HourFormat={true}
               />
             </div>
           </div>

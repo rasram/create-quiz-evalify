@@ -4,15 +4,13 @@ import { useState, KeyboardEvent } from 'react';
 import { Switch } from "@/components/ui/switch";
 import {Textarea} from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { format, set } from "date-fns"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { X, Plus, Clock, Calendar as CalendarIcon, Tag, Lock, Calculator, ExternalLink } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
+import { DateTimePicker } from "./datetime-picker";
 
 interface MetadataTabProps {
   quizData?: {
@@ -38,22 +36,22 @@ interface MetadataTabProps {
 }
 
 export default function MetadataTab({ quizData, onSave }: MetadataTabProps) {
-  const [title, setTitle] = useState(quizData?.metadata?.title || "");
-  const [description, setDescription] = useState(quizData?.metadata?.description || "");
-  const [duration, setDuration] = useState(quizData?.metadata?.duration || "");
-  const [durationUnit, setDurationUnit] = useState(quizData?.metadata?.durationUnit || "Minutes");
-  const [startTime, setStartTime] = useState(quizData?.metadata?.startTime || "");
-  const [startDate, setStartDate] = useState(quizData?.metadata?.startDate || "");
-  const [endTime, setEndTime] = useState(quizData?.metadata?.endTime || "");
-  const [endDate, setEndDate] = useState(quizData?.metadata?.endDate || "");
-  const [course, setCourse] = useState(quizData?.metadata?.course || "Math");
-  const [tags, setTags] = useState(quizData?.metadata?.tags || ["Mid Sem", "End Sem", "Daily test", "Practice"]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [duration, setDuration] = useState("");
+  const [durationUnit, setDurationUnit] = useState("Minutes");
+  const [startTime, setStartTime] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [course, setCourse] = useState("Math");
+  const [tags, setTags] = useState(["Mid Sem", "End Sem", "Daily test", "Practice"]);
   const [tagInput, setTagInput] = useState("");
-  const [isPasswordProtected, setPasswordProtected] = useState(quizData?.metadata?.isPasswordProtected || false);
-  const [password, setPassword] = useState(quizData?.metadata?.password || "");
-  const [autoSubmit, setAutoSubmit] = useState(quizData?.metadata?.autoSubmit || false);
-  const [calculatorAccess, setCalculatorAccess] = useState(quizData?.metadata?.calculatorAccess || false);
-  const [allowTabSwitching, setAllowTabSwitching] = useState(quizData?.metadata?.allowTabSwitching || false);
+  const [isPasswordProtected, setPasswordProtected] = useState(false);
+  const [password, setPassword] = useState("");
+  const [autoSubmit, setAutoSubmit] = useState(false);
+  const [calculatorAccess, setCalculatorAccess] = useState(false);
+  const [allowTabSwitching, setAllowTabSwitching] = useState(false);
 
   const addTag = (): void => {
     if (tagInput && !tags.includes(tagInput)) {
@@ -184,33 +182,16 @@ export default function MetadataTab({ quizData, onSave }: MetadataTabProps) {
                 <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2">
                   <CalendarIcon className="h-4 w-4" /> Start Date & Time
                 </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full bg-[#0f172a] border-gray-700">
-                        {startDate
-                          ? format(new Date(startDate), "dd/MM/yyyy")
-                          : "Start Date"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={startDate ? new Date(startDate) : undefined}
-                        onSelect={(date) => {
-                          if (date) {
-                            setStartDate(date.toISOString().split("T")[0]);
-                          }
-                        }}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <Input
-                    type="time"
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                    className="bg-[#0f172a] border-gray-700"
+                <div>
+                  <DateTimePicker
+                    value={startDate && startTime ? new Date(`${startDate}T${startTime}`) : undefined}
+                    onChange={(date) => {
+                      if (date) {
+                        setStartDate(date.toISOString().split('T')[0]);
+                        setStartTime(date.toTimeString().split(' ')[0].substring(0, 5));
+                      }
+                    }}
+                    use12HourFormat={true}
                   />
                 </div>
               </div>
@@ -218,33 +199,17 @@ export default function MetadataTab({ quizData, onSave }: MetadataTabProps) {
                 <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2">
                   <CalendarIcon className="h-4 w-4" /> End Date & Time
                 </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full bg-[#0f172a] border-gray-700">
-                        {endDate
-                          ? format(new Date(endDate), "dd/MM/yyyy")
-                          : "End Date"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={endDate ? new Date(endDate) : undefined}
-                        onSelect={(date) => {
-                          if (date) {
-                            setEndDate(date.toISOString().split("T")[0]);
-                          }
-                        }}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <Input
-                    type="time"
-                    value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
-                    className="bg-[#0f172a] border-gray-700"
+                <div>
+                  <DateTimePicker
+                    value={endDate && endTime ? new Date(`${endDate}T${endTime}`) : undefined}
+                    onChange={(date) => {
+                      if (date) {
+                        setEndDate(date.toISOString().split('T')[0]);
+                        setEndTime(date.toTimeString().split(' ')[0].substring(0, 5));
+                      }
+                    }}
+                    use12HourFormat={true}
+                    min={startDate && startTime ? new Date(`${startDate}T${startTime}`) : undefined}
                   />
                 </div>
               </div>

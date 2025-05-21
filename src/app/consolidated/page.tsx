@@ -236,7 +236,7 @@ export default function QuizCreator() {
                     <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2">
                       <CalendarIcon className="h-4 w-4" /> Start Date & Time
                     </label>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button variant="outline" className="w-full bg-[#0f172a] border-gray-700">
