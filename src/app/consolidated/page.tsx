@@ -2,15 +2,24 @@
 
 import type React from "react"
 import { useState } from "react"
+import { format } from "date-fns"
+import { cn } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
-import { X, Plus, Clock, Calendar, Tag, Lock, Calculator, ExternalLink, Save } from "lucide-react"
+import { X, Plus, Clock, Calendar as CalendarIcon, Tag, Lock, Calculator, ExternalLink, Save } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
 interface QuizData {
   metadata: {
@@ -50,7 +59,6 @@ interface QuizData {
 }
 
 export default function QuizCreator() {
-  // Initial quiz data state
   const [quizData, setQuizData] = useState<QuizData>({
     metadata: {
       title: "",
@@ -88,10 +96,8 @@ export default function QuizCreator() {
     },
   })
 
-  // Tag input state
   const [tagInput, setTagInput] = useState("")
 
-  // Update quiz data
   const updateQuizData = (section: keyof QuizData, data: any) => {
     setQuizData((prev) => ({
       ...prev,
@@ -102,7 +108,6 @@ export default function QuizCreator() {
     }))
   }
 
-  // Add tag
   const addTag = () => {
     if (tagInput && !quizData.metadata.tags.includes(tagInput)) {
       updateQuizData("metadata", {
@@ -112,14 +117,12 @@ export default function QuizCreator() {
     }
   }
 
-  // Remove tag
   const removeTag = (tagToRemove: string) => {
     updateQuizData("metadata", {
       tags: quizData.metadata.tags.filter((tag) => tag !== tagToRemove),
     })
   }
 
-  // Handle tag input keydown
   const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault()
@@ -127,36 +130,31 @@ export default function QuizCreator() {
     }
   }
 
-  // Save all quiz data
   const saveQuiz = () => {
     console.log("Quiz data saved:", quizData)
-    // Here you would typically send the data to your backend
   }
 
   return (
     <div className="min-h-screen bg-[#0f172a] text-white">
       <header className="flex justify-between items-center p-4 border-b border-gray-800 sticky top-0 z-10 bg-[#0f172a]">
-        <h1 className="text-2xl md:text-3xl font-semibold text-white mb-4">
-  Create Quiz
-</h1>
+        <h1 className="text-2xl md:text-3xl font-semibold text-white">
+          Create Quiz
+        </h1>
         <div className="flex items-center gap-4">
-          <div className="text-sm">User123</div>
-          <Button onClick={saveQuiz} className="flex items-center gap-2">
-            <Save className="h-4 w-4" />
-            Save Quiz
-          </Button>
+          <Avatar>
+            <AvatarImage src="avatar.jpg" alt="User Avatar" />
+            <AvatarFallback>User123</AvatarFallback>
+          </Avatar>
         </div>
       </header>
 
       <div className="max-w-7xl mx-auto p-4 pb-24">
-        {/* Quiz Metadata Section */}
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 border-b border-gray-800 pb-2">
             Quiz Metadata
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left Column - Basic Info */}
             <Card className="bg-[#1e293b] border-gray-800 lg:col-span-2 text-white">
               <CardHeader>
                 <CardTitle>Basic Information</CardTitle>
@@ -237,15 +235,30 @@ export default function QuizCreator() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2">
-                      <Calendar className="h-4 w-4" /> Start Date & Time
+                      <CalendarIcon className="h-4 w-4" /> Start Date & Time
                     </label>
                     <div className="grid grid-cols-2 gap-2">
-                      <Input
-                        type="date"
-                        value={quizData.metadata.startDate}
-                        onChange={(e) => updateQuizData("metadata", { startDate: e.target.value })}
-                        className="bg-[#0f172a] border-gray-700"
-                      />
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button variant="outline" className="w-full bg-[#0f172a] border-gray-700">
+                            {quizData.metadata.startDate
+                              ? format(new Date(quizData.metadata.startDate), "dd/MM/yyyy")
+                              : "Start Date"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                          <Calendar
+                            mode="single"
+                            selected={quizData.metadata.startDate ? new Date(quizData.metadata.startDate) : undefined}
+                            onSelect={(date) => {
+                              if (date) {
+                                updateQuizData("metadata", { startDate: date.toISOString().split("T")[0] })
+                              }
+                            }}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
                       <Input
                         type="time"
                         value={quizData.metadata.startTime}
@@ -254,18 +267,32 @@ export default function QuizCreator() {
                       />
                     </div>
                   </div>
-
                   <div className="space-y-2">
                     <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2">
-                      <Calendar className="h-4 w-4" /> End Date & Time
+                      <CalendarIcon className="h-4 w-4" /> End Date & Time
                     </label>
                     <div className="grid grid-cols-2 gap-2">
-                      <Input
-                        type="date"
-                        value={quizData.metadata.endDate}
-                        onChange={(e) => updateQuizData("metadata", { endDate: e.target.value })}
-                        className="bg-[#0f172a] border-gray-700"
-                      />
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button variant="outline" className="w-full bg-[#0f172a] border-gray-700">
+                            {quizData.metadata.endDate
+                              ? format(new Date(quizData.metadata.endDate), "dd/MM/yyyy")
+                              : "End Date"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                          <Calendar
+                            mode="single"
+                            selected={quizData.metadata.endDate ? new Date(quizData.metadata.endDate) : undefined}
+                            onSelect={(date) => {
+                              if (date) {
+                                updateQuizData("metadata", { endDate: date.toISOString().split("T")[0] })
+                              }
+                            }}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
                       <Input
                         type="time"
                         value={quizData.metadata.endTime}
@@ -288,7 +315,7 @@ export default function QuizCreator() {
                       onKeyDown={handleTagKeyDown}
                       className="bg-[#0f172a] border-gray-700"
                     />
-                    <Button onClick={addTag} size="icon" variant="outline" className="border-gray-700">
+                    <Button onClick={addTag} size="icon" variant="secondary" className="border-gray-700">
                       <Plus className="h-4 w-4" />
                     </Button>
                   </div>
@@ -306,14 +333,13 @@ export default function QuizCreator() {
               </CardContent>
             </Card>
 
-            {/* Right Column - Quiz Settings */}
             <Card className="bg-[#1e293b] border-gray-800 text-white">
               <CardHeader>
                 <CardTitle>Quiz Settings</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 font-medium text-sm">
                     <Lock className="h-4 w-4" />
                     <span>Password Protected</span>
                   </div>
@@ -336,7 +362,7 @@ export default function QuizCreator() {
                 <Separator className="bg-gray-700" />
 
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 font-medium text-sm">
                     <Clock className="h-4 w-4" />
                     <span>Auto-submit</span>
                   </div>
@@ -349,7 +375,7 @@ export default function QuizCreator() {
                 <Separator className="bg-gray-700" />
 
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 font-medium text-sm">
                     <Calculator className="h-4 w-4" />
                     <span>Calculator Access</span>
                   </div>
@@ -362,7 +388,7 @@ export default function QuizCreator() {
                 <Separator className="bg-gray-700" />
 
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 font-medium text-sm">
                     <ExternalLink className="h-4 w-4" />
                     <span>Allow Tab Switching</span>
                   </div>
@@ -376,7 +402,6 @@ export default function QuizCreator() {
           </div>
         </section>
 
-        {/* Scoring Method Section */}
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 border-b border-gray-800 pb-2">
             Scoring Method
@@ -449,7 +474,6 @@ export default function QuizCreator() {
           </Card>
         </section>
 
-        {/* Publishing Settings Section */}
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 border-b border-gray-800 pb-2">
             Publishing Settings
@@ -462,12 +486,27 @@ export default function QuizCreator() {
                   <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                     Quiz Publish Date
                   </label>
-                  <Input
-                    type="date"
-                    value={quizData.publishing.publishDate}
-                    onChange={(e) => updateQuizData("publishing", { publishDate: e.target.value })}
-                    className="bg-[#0f172a] border-gray-700"
-                  />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className="w-full bg-[#0f172a] border-gray-700">
+                        {quizData.publishing.publishDate
+                          ? format(new Date(quizData.publishing.publishDate), "dd/MM/yyyy")
+                          : "Quiz Publish Date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={quizData.publishing.publishDate ? new Date(quizData.publishing.publishDate) : undefined}
+                        onSelect={(date) => {
+                          if (date) {
+                            updateQuizData("metadata", { startDate: date.toISOString().split("T")[0] })
+                          }
+                        }}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
 
                 <div className="space-y-2">
@@ -519,12 +558,27 @@ export default function QuizCreator() {
                   <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                     Results Publish Date
                   </label>
-                  <Input
-                    type="date"
-                    value={quizData.publishing.resultsPublishDate}
-                    onChange={(e) => updateQuizData("publishing", { resultsPublishDate: e.target.value })}
-                    className="bg-[#0f172a] border-gray-700"
-                  />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className="w-full bg-[#0f172a] border-gray-700">
+                        {quizData.publishing.resultsPublishDate
+                          ? format(new Date(quizData.publishing.resultsPublishDate), "dd/MM/yyyy")
+                          : "Results Publish Date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={quizData.publishing.resultsPublishDate ? new Date(quizData.publishing.resultsPublishDate) : undefined}
+                        onSelect={(date) => {
+                          if (date) {
+                            updateQuizData("metadata", { startDate: date.toISOString().split("T")[0] })
+                          }
+                        }}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
 
                 <div className="space-y-2">
@@ -582,9 +636,8 @@ export default function QuizCreator() {
           </Card>
         </section>
 
-        {/* Save Button */}
         <div className="left-0 right-0 bg-[#0f172a] border-t border-gray-800 p-4 flex justify-end">
-          <Button onClick={saveQuiz} size="lg" className="flex items-center gap-2">
+          <Button onClick={saveQuiz} size="lg" variant="secondary" className="flex items-center gap-2">
             <Save className="h-4 w-4" />
             Save Quiz
           </Button>
