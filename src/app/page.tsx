@@ -3,7 +3,7 @@ import { useState } from 'react';
 import TopBar from '@/components/TopBar';
 import Tabs from '@/components/Tabs';
 import MetadataTab from '@/components/MetadataTab';
-import OrganisationTab from '@/components/QuestionsTab';
+import QManagementTab from '@/components/QManagementTab';
 import ScoringTab from '@/components/ScoringTab';
 import PublishingTab from '@/components/PublishingTab';
 import styles from '@/styles/createQuiz.module.css';
@@ -21,8 +21,8 @@ export default function CreateQuiz() {
           <PublishingTab />
         </>
         );
-      case 'organisation':
-        return <OrganisationTab />;
+      case 'qmanagement':
+        return <QManagementTab />;
       default:
         return <>
           <MetadataTab />

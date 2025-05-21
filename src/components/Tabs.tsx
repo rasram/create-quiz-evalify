@@ -13,7 +13,7 @@ interface Tab {
 export default function Tabs({ activeTab, setActiveTab }: TabsProps) {
   const tabs: Tab[] = [
     { id: 'metadata', label: 'Quiz Metadata' },
-    { id: 'organisation', label: 'Quiz Questions' }
+    { id: 'qmanagement', label: 'Quiz Questions' }
   ];
   
   return (
